@@ -7,10 +7,12 @@ import { BsSave2Fill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 
 import Image from "next/image";
+import EnterComment from "@/components/EnterComment";
 
 require("dotenv").config();
 
 const Page = ({ params }) => {
+  const [colorRose, setColorRose] = useState(false);
   const [postData, setPostData] = useState({});
   const [loading, setLoading] = useState(true);
   const [likeCount, setLikeCount] = useState(postData.likes?.length);
@@ -49,6 +51,7 @@ const Page = ({ params }) => {
       const updatedPostData = await axios.get(
         `http://localhost:3001/all_posts/${postId}`
       );
+      setColorRose(!colorRose);
       setLikeCount(updatedPostData.data.likes.length);
     } catch (error) {
       console.error("Error liking post:", error.message);
@@ -100,8 +103,8 @@ const Page = ({ params }) => {
 
   return (
     <div>
-      <div className="w-full h-full text-white flex text-xs">
-        <div className="flex justify-center items-center space-x-5">
+      <div className="text-white flex text-xs px-5 justify-center">
+        <div>
           <video
             loop
             autoPlay
@@ -116,21 +119,24 @@ const Page = ({ params }) => {
           </video>
         </div>
 
-        <div className="w-[30rem] py-5 space-y-2 px-2">
+        <div className="w-[45rem] py-5 space-y-2 px-2 overflow-auto h-[55rem] no-scrollbar pl-7">
           <div className="items-center text-sm bg-zinc-900 w-full rounded-xl px-2 justify-between">
-            <div className="flex items-center space-x-3 py-3">
-              <Image
-                height={60}
-                width={60}
-                src={postData.user.profile_img}
-                className="rounded-full border-2 border-amber-200"
-              />
+            <div className="flex items-center justify-between py-3">
+              <div className="flex items-center space-x-3">
+                <Image
+                  height={60}
+                  width={60}
+                  src={postData.user.profile_img}
+                  className="rounded-full border-2 border-amber-200"
+                  alt="firs alt"
+                />
 
-              <div>
-                <h1 className="text-lg font-medium">
-                  {postData.user.user_name}
-                </h1>
-                <h3>{postData.created_datetime}</h3>
+                <div>
+                  <h1 className="text-lg font-medium">
+                    {postData.user.user_name}
+                  </h1>
+                  <h3>{postData.created_datetime}</h3>
+                </div>
               </div>
 
               <button className="bg-rose-500 text-lg font-medium py-1 px-4 rounded-md hover:bg-rose-800 duration-200">
@@ -138,7 +144,7 @@ const Page = ({ params }) => {
               </button>
             </div>
 
-            <div className="flex">
+            <div className="flex pb-3 justify-between">
               <p>
                 {showFullCaption
                   ? postData.caption
@@ -160,7 +166,10 @@ const Page = ({ params }) => {
               className="rounded-full bg-stone-900 flex items-center flex-col justify-center w-[4rem] h-[4rem] duration-200 hover:bg-stone-900/50"
               onClick={() => handleLike(main_id, postData.id)}
             >
-              <IoMdHeart size={25} />
+              <IoMdHeart
+                size={25}
+                className={`${colorRose ? "text-white" : "text-rose-900"}`}
+              />
               {likeCount}
             </button>
             <button className="rounded-full bg-stone-900 flex items-center flex-col justify-center w-[4rem] h-[4rem] duration-200 hover:bg-stone-900/50">
@@ -174,13 +183,13 @@ const Page = ({ params }) => {
           </div>
 
           <div>
-            <h3 className="text-lg border-b-2 border-gray-600 flex justify-center py-3 cursor-pointer">
+            <h3 className="text-lg border-b-2 border-gray-600 flex justify-center py-3 cursor-pointer sticky top-0 bg-black">
               Comments ( {postData.comments.length} )
             </h3>
 
             <div>
               {postData.comments.map((item, index) => (
-                <div key={index} className="flex items-center space-x-3 py-2">
+                <div key={index} className="flex items-center space-x-3 py-2 ">
                   <div>
                     <Image
                       src={
@@ -191,6 +200,7 @@ const Page = ({ params }) => {
                       height={45}
                       width={45}
                       className="rounded-full border-2 border-indigo-400"
+                      alt={index}
                     />
                   </div>
 
@@ -202,13 +212,17 @@ const Page = ({ params }) => {
                         )?.user_name
                       }
                     </h2>
-                    <div>
+                    <div className="w-[39rem]">
                       <h4>{item.comment}</h4>
                       <p>{calculateTimeDifference(item.created_datetime)}</p>
                     </div>
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="fixed bottom-5">
+              <EnterComment postData={postData.id} />
             </div>
           </div>
         </div>

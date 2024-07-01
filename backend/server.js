@@ -139,4 +139,33 @@ app.post("/all_likes", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// /////////////////////////////// COMMENTS ///////////////////////////////////
+
+app.get("/all_comments", async (req, res) => {
+  try {
+    const comments = await comment.findAll();
+    res.json(comments);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.post("/all_comments", async (req, res) => {
+  try {
+    const comments = req.body.comment;
+    const post_id = req.body.post_id;
+    const created_by_user_id = req.body.created_by_user_id;
+
+    const createComment = await comment.create({
+      post_id,
+      created_by_user_id,
+      comment: comments,
+    });
+    res.status(201).json(createComment);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.listen(PORT);
