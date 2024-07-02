@@ -30,7 +30,21 @@ app.get("/all_users", async (req, res) => {
 app.get("/all_users/:id", async (req, res) => {
   try {
     const param = req.params.id;
-    const selectedUser = await user.findByPk(param);
+    const params = param.replace("_", " ");
+    const selectedUser = await user.findAll({
+      where: { user_name: params },
+      include: [
+        {
+          model: post,
+        },
+        {
+          model: like,
+        },
+        {
+          model: save,
+        },
+      ],
+    });
     if (selectedUser) {
       res.json(selectedUser);
     } else {
@@ -110,6 +124,34 @@ app.get("/all_likes/:id", async (req, res) => {
       where: { post_id: param },
     });
     res.json(selectedLike);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.get("/all_likes/user/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const posts = await post.findAll({
+      where: { created_by_user_id: userId },
+      include: [{ model: like }],
+    });
+
+    const likesByUser = posts.reduce((acc, post) => {
+      acc[post.id] = (acc[post.id] || 0) + post.likes.length;
+      return acc;
+    }, {});
+
+    const response = {
+      userId,
+      totalLikes: Object.values(likesByUser).reduce(
+        (sum, value) => sum + value,
+        0
+      ),
+      postLikes: Object.keys(likesByUser).map((postId) => parseInt(postId)),
+    };
+
+    res.json(response);
   } catch (err) {
     console.log(err.message);
   }

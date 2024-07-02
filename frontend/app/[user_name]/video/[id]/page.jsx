@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Link from "next/link";
 import { IoMdHeart } from "react-icons/io";
 import { FaCommentAlt } from "react-icons/fa";
 import { BsSave2Fill } from "react-icons/bs";
@@ -122,22 +123,26 @@ const Page = ({ params }) => {
         <div className="w-[45rem] py-5 space-y-2 px-2 overflow-auto h-[55rem] no-scrollbar pl-7">
           <div className="items-center text-sm bg-zinc-900 w-full rounded-xl px-2 justify-between">
             <div className="flex items-center justify-between py-3">
-              <div className="flex items-center space-x-3">
-                <Image
-                  height={60}
-                  width={60}
-                  src={postData.user.profile_img}
-                  className="rounded-full border-2 border-amber-200"
-                  alt="firs alt"
-                />
+              <Link
+                href={`/user/@${postData.user.user_name.replace(" ", "_")}`}
+              >
+                <div className="flex items-center space-x-3">
+                  <Image
+                    height={60}
+                    width={60}
+                    src={postData.user.profile_img}
+                    className="rounded-full border-2 border-amber-200"
+                    alt="firs alt"
+                  />
 
-                <div>
-                  <h1 className="text-lg font-medium">
-                    {postData.user.user_name}
-                  </h1>
-                  <h3>{postData.created_datetime}</h3>
+                  <div>
+                    <h1 className="text-lg font-medium">
+                      {postData.user.user_name}
+                    </h1>
+                    <h3>{postData.created_datetime}</h3>
+                  </div>
                 </div>
-              </div>
+              </Link>
 
               <button className="bg-rose-500 text-lg font-medium py-1 px-4 rounded-md hover:bg-rose-800 duration-200">
                 Follow

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import axios from "axios";
 import Loading from "./loading";
 import Link from "next/link";
@@ -7,6 +8,8 @@ import { Suspense, useState, useEffect } from "react";
 import { IoMdHeart } from "react-icons/io";
 import { FaCommentAlt } from "react-icons/fa";
 import { BsSave2Fill } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 
 export default function Post() {
   return (
@@ -24,6 +27,7 @@ const VideoComponent = () => {
   const [colorRose, setColorRose] = useState(false);
   const [postData, setPostData] = useState([]);
   const [likeCounts, setLikeCounts] = useState({});
+  const [followStatus, setFollowStatus] = useState({});
 
   useEffect(() => {
     fetchingData();
@@ -34,10 +38,13 @@ const VideoComponent = () => {
       const response = await axios.get("http://localhost:3001/all_posts");
       setPostData(response.data);
       const initialLikeCounts = {};
+      const initialFollowStatus = {};
       response.data.forEach((post) => {
         initialLikeCounts[post.id] = post.likes.length;
+        initialFollowStatus[post.user.id] = false;
       });
       setLikeCounts(initialLikeCounts);
+      setFollowStatus(initialFollowStatus);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -52,7 +59,7 @@ const VideoComponent = () => {
       const updatedPostData = await axios.get(
         `http://localhost:3001/all_posts/${postId}`
       );
-      setColorRose(!likeCounts);
+      setColorRose(!colorRose);
       setLikeCounts((prev) => ({
         ...prev,
         [postId]: updatedPostData.data.likes.length,
@@ -60,6 +67,13 @@ const VideoComponent = () => {
     } catch (error) {
       console.error("Error liking post:", error.message);
     }
+  };
+
+  const handleFollow = (userId) => {
+    setFollowStatus((prev) => ({
+      ...prev,
+      [userId]: !prev[userId],
+    }));
   };
 
   return (
@@ -89,14 +103,30 @@ const VideoComponent = () => {
               </video>
             </Link>
 
-            <div className="text-sm space-y-1">
+            <div className="text-sm space-y-1 flex flex-col items-center">
+              <div className="relative cursor-pointer">
+                <Image
+                  className="rounded-full"
+                  src={item.user.profile_img}
+                  height={55}
+                  width={55}
+                  alt="hero image"
+                />
+                <div
+                  onClick={() => handleFollow(item.user.id)}
+                  className="absolute -bottom-2 right-1/4 p-2 bg-rose-700 font-bold rounded-full"
+                >
+                  {followStatus[item.user.id] ? <FaCheck /> : <FaPlus />}
+                </div>
+              </div>
+
               <button
                 onClick={() => handleLike(item.user.id, item.id)}
                 className="rounded-full bg-black hover:bg-white/30 duration-200 flex items-center flex-col justify-center w-[5rem] h-[5rem]"
               >
                 <IoMdHeart
                   size={25}
-                  className={`${colorRose ? "text-white" : "text-rose-900"}`}
+                  className={`${colorRose ? "text-rose-900" : "text-white"}`}
                 />
                 {likeCounts[item.id] || 0}
               </button>
