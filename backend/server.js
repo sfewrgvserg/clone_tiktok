@@ -27,6 +27,16 @@ app.get("/all_users", async (req, res) => {
   }
 });
 
+app.get("/all_users/userId/:id", async (req, res) => {
+  try {
+    const params = req.params.id;
+    const users = await user.findAll({ where: { id: params } });
+    res.json(users);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.get("/all_users/:id", async (req, res) => {
   try {
     const param = req.params.id;
@@ -122,6 +132,19 @@ app.get("/all_likes/:id", async (req, res) => {
     const param = req.params.id;
     const selectedLike = await like.findAll({
       where: { post_id: param },
+    });
+    res.json(selectedLike);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.get("/all_likes/likedUser/:id", async (req, res) => {
+  try {
+    const param = req.params.id;
+    const selectedLike = await like.findAll({
+      include: [{ model: post }, { model: user }],
+      where: { user_id: param },
     });
     res.json(selectedLike);
   } catch (err) {

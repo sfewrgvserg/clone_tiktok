@@ -10,6 +10,7 @@ import { FaCommentAlt } from "react-icons/fa";
 import { BsSave2Fill } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
+import Aside from "@/components/Aside";
 
 export default function Post() {
   return (
@@ -78,6 +79,9 @@ const VideoComponent = () => {
 
   return (
     <section>
+      <div className="fixed">
+        <Aside />
+      </div>
       <div className="w-full h-full text-white">
         {postData.map((item, index) => (
           <div

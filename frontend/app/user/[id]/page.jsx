@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PiArrowBendDoubleUpRightBold } from "react-icons/pi";
 import { HiDotsVertical } from "react-icons/hi";
+import Liked from "@/components/Liked";
 
 require("dotenv").config();
 
@@ -13,6 +14,9 @@ const Page = ({ params }) => {
   const [user, setUser] = useState([]);
   const [like, setLike] = useState([]);
   const [totalLikes, setTotalLikes] = useState(0);
+  const [showLikes, setShowLikes] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showVideo, setShowVideo] = useState(true); // Set to true by default
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -33,6 +37,24 @@ const Page = ({ params }) => {
 
     fetchingData();
   }, [params.id]);
+
+  const handleVideo = () => {
+    setShowVideo(true);
+    setShowFavorites(false);
+    setShowLikes(false);
+  };
+
+  const handleFavorites = () => {
+    setShowVideo(false);
+    setShowFavorites(true);
+    setShowLikes(false);
+  };
+
+  const handleLiked = () => {
+    setShowVideo(false);
+    setShowFavorites(false);
+    setShowLikes(true);
+  };
 
   return (
     <div className="text-white text-sm p-5">
@@ -89,37 +111,65 @@ const Page = ({ params }) => {
             </div>
 
             <div>
-              <div>
-                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700">
-                  <Link href="#" className="w-full flex justify-center">
+              <div className="flex space-x-10">
+                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
+                  <Link
+                    onClick={handleVideo}
+                    href=""
+                    className="w-full flex justify-center"
+                  >
                     Videos
+                  </Link>
+                </h2>
+                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
+                  <Link
+                    onClick={handleFavorites}
+                    href=""
+                    className="w-full flex justify-center"
+                  >
+                    Favorites
+                  </Link>
+                </h2>
+                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
+                  <Link
+                    onClick={handleLiked}
+                    href=""
+                    className="w-full flex justify-center"
+                  >
+                    Liked
                   </Link>
                 </h2>
               </div>
 
               <div className="grid grid-cols-7 gap-5 max-2xl:grid-cols-6 max-xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
-                {item.posts.map((Videos, index) => (
-                  <div key={index}>
-                    <Link
-                      href={`/@${item.user_name.replace(" ", "_")}/video/${
-                        Videos.id
-                      }`}
-                    >
-                      <video
-                        loop
-                        autoPlay
-                        id="autoplay"
-                        controls
-                        aria-label="Video player"
-                        muted
-                        className="rounded-xl py-5"
+                {showVideo &&
+                  item.posts &&
+                  item.posts.map((video, index) => (
+                    <div key={index}>
+                      <Link
+                        href={`/@${item.user_name.replace(" ", "_")}/video/${
+                          video.id
+                        }`}
                       >
-                        <source src={Videos.media_file} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </Link>
-                  </div>
-                ))}
+                        <video
+                          loop
+                          autoPlay
+                          id="autoplay"
+                          controls
+                          aria-label="Video player"
+                          muted
+                          className="rounded-xl py-5"
+                        >
+                          <source src={video.media_file} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </Link>
+                    </div>
+                  ))}
+
+                {showLikes && <Liked userId={item.id} />}
+
+                {showFavorites && <div>Favorites content goes here</div>}
               </div>
             </div>
           </div>
