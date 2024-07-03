@@ -105,7 +105,7 @@ const Page = ({ params }) => {
   return (
     <div>
       <div className="text-white flex text-xs px-5 justify-center">
-        <div>
+        <div className="w-full justify-center flex">
           <video
             loop
             autoPlay
@@ -113,14 +113,14 @@ const Page = ({ params }) => {
             controls
             aria-label="Video player"
             muted
-            className="h-[55rem] rounded-xl py-5"
+            className="h-[58rem] rounded-xl py-5"
           >
             <source src={postData.media_file} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
 
-        <div className="w-[45rem] py-5 space-y-2 px-2 overflow-auto h-[55rem] no-scrollbar pl-7">
+        <div className="w-[45rem] py-5 space-y-2 px-2 overflow-auto h-[55rem] no-scrollbar pl-7 max-lg:hidden">
           <div className="items-center text-sm bg-zinc-900 w-full rounded-xl px-2 justify-between">
             <div className="flex items-center justify-between py-3">
               <Link

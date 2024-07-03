@@ -97,7 +97,7 @@ const Page = ({ params }) => {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-8 gap-10">
+              <div className="grid grid-cols-7 gap-5 max-2xl:grid-cols-6 max-xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
                 {item.posts.map((Videos, index) => (
                   <div key={index}>
                     <Link
@@ -112,7 +112,7 @@ const Page = ({ params }) => {
                         controls
                         aria-label="Video player"
                         muted
-                        className="h-[20rem] rounded-xl py-5"
+                        className="rounded-xl py-5"
                       >
                         <source src={Videos.media_file} type="video/mp4" />
                         Your browser does not support the video tag.

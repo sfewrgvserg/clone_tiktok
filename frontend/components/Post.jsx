@@ -105,13 +105,15 @@ const VideoComponent = () => {
 
             <div className="text-sm space-y-1 flex flex-col items-center">
               <div className="relative cursor-pointer">
-                <Image
-                  className="rounded-full"
-                  src={item.user.profile_img}
-                  height={55}
-                  width={55}
-                  alt="hero image"
-                />
+                <Link href={`/user/@${item.user.user_name.replace(" ", "_")}`}>
+                  <Image
+                    className="rounded-full"
+                    src={item.user.profile_img}
+                    height={55}
+                    width={55}
+                    alt="hero image"
+                  />
+                </Link>
                 <div
                   onClick={() => handleFollow(item.user.id)}
                   className="absolute -bottom-2 right-1/4 p-2 bg-rose-700 font-bold rounded-full"
