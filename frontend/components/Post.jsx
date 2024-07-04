@@ -128,8 +128,6 @@ const VideoComponent = () => {
                 </div>
               </div>
 
-              <h1>{item.user.id}</h1>
-              <h1>{item.id}</h1>
               <button
                 onClick={() => handleLike(main_id, item.id)}
                 className="rounded-full bg-black hover:bg-white/30 duration-200 flex items-center flex-col justify-center w-[5rem] h-[5rem]"
