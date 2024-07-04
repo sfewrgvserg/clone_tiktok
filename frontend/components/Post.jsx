@@ -51,6 +51,8 @@ const VideoComponent = () => {
     }
   };
 
+  const main_id = process.env.NEXT_PUBLIC_MAIN_ID;
+
   const handleLike = async (userId, postId) => {
     try {
       await axios.post("http://localhost:3001/all_likes", {
@@ -126,8 +128,10 @@ const VideoComponent = () => {
                 </div>
               </div>
 
+              <h1>{item.user.id}</h1>
+              <h1>{item.id}</h1>
               <button
-                onClick={() => handleLike(item.user.id, item.id)}
+                onClick={() => handleLike(main_id, item.id)}
                 className="rounded-full bg-black hover:bg-white/30 duration-200 flex items-center flex-col justify-center w-[5rem] h-[5rem]"
               >
                 <IoMdHeart

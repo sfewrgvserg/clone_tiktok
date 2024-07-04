@@ -143,8 +143,8 @@ app.get("/all_likes/likedUser/:id", async (req, res) => {
   try {
     const param = req.params.id;
     const selectedLike = await like.findAll({
-      include: [{ model: post }, { model: user }],
       where: { user_id: param },
+      include: [{ model: post }, { model: user }],
     });
     res.json(selectedLike);
   } catch (err) {

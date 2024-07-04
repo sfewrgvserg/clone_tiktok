@@ -112,33 +112,43 @@ const Page = ({ params }) => {
 
             <div>
               <div className="flex space-x-10">
-                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
-                  <Link
-                    onClick={handleVideo}
-                    href=""
-                    className="w-full flex justify-center"
-                  >
-                    Videos
-                  </Link>
-                </h2>
-                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
-                  <Link
-                    onClick={handleFavorites}
-                    href=""
-                    className="w-full flex justify-center"
-                  >
-                    Favorites
-                  </Link>
-                </h2>
-                <h2 className="w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200">
-                  <Link
-                    onClick={handleLiked}
-                    href=""
-                    className="w-full flex justify-center"
-                  >
-                    Liked
-                  </Link>
-                </h2>
+                <Link
+                  onClick={handleVideo}
+                  href=""
+                  className={`w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200 ${
+                    showVideo
+                      ? "text-rose-600 border-rose-600"
+                      : "border-gray-700"
+                  }`}
+                >
+                  <h2 className="w-full flex justify-center">Videos</h2>
+                </Link>
+                <Link
+                  onClick={handleFavorites}
+                  href=""
+                  className={`w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200 ${
+                    showFavorites
+                      ? "border-rose-600 text-rose-600"
+                      : "border-gray-700"
+                  }`}
+                >
+                  <h2 className="w-full flex justify-center">
+                    <h2 className="w-full flex justify-center">Favorites</h2>
+                  </h2>
+                </Link>
+                <Link
+                  onClick={handleLiked}
+                  href=""
+                  className={`w-[15rem] pb-3 text-xl font-semibold border-b-2 border-gray-700 hover:border-rose-600 hover:text-rose-600 duration-200 ${
+                    showLikes
+                      ? "border-rose-600 text-rose-600"
+                      : "border-gray-700"
+                  }`}
+                >
+                  <h2 className="w-full flex justify-center">
+                    <h2 className="w-full flex justify-center">Liked</h2>
+                  </h2>
+                </Link>
               </div>
 
               <div className="grid grid-cols-7 gap-5 max-2xl:grid-cols-6 max-xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
