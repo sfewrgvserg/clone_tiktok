@@ -233,4 +233,63 @@ app.post("/all_comments", async (req, res) => {
   }
 });
 
+// /////////////////////////////// FAVORITES ///////////////////////////////////
+
+app.get("/all_favorites", async (req, res) => {
+  try {
+    const favorites = await save.findAll();
+    res.json(favorites);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/all_favorites", async (req, res) => {
+  try {
+    const user_id = req.body.user_id;
+    const post_id = req.body.post_id;
+
+    const findFavorite = await save.findOne({
+      where: { post_id: post_id, user_id: user_id },
+    });
+    if (findFavorite) {
+      await save.destroy({ where: { post_id: post_id, user_id: user_id } });
+      res.status(200).json({ message: "favorites removed" });
+    } else {
+      const createFavorite = await save.create({
+        user_id,
+        post_id,
+      });
+      res.status(201).json(createFavorite);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/all_favorites/:id", async (req, res) => {
+  try {
+    const param = req.params.id;
+    const selectedFavorite = await save.findAll({
+      where: { post_id: param },
+    });
+    res.json(selectedFavorite);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.get("/all_favorites/favoritedUser/:id", async (req, res) => {
+  try {
+    const param = req.params.id;
+    const selectedFavorite = await save.findAll({
+      where: { user_id: param },
+      include: [{ model: post }, { model: user }],
+    });
+    res.json(selectedFavorite);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.listen(PORT);

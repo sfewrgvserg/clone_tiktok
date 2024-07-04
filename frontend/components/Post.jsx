@@ -29,6 +29,8 @@ const VideoComponent = () => {
   const [postData, setPostData] = useState([]);
   const [likeCounts, setLikeCounts] = useState({});
   const [followStatus, setFollowStatus] = useState({});
+  const [favoriteCounts, setFavoriteCounts] = useState({});
+  const [favoriteStatus, setFavoriteStatus] = useState({});
 
   useEffect(() => {
     fetchingData();
@@ -40,12 +42,18 @@ const VideoComponent = () => {
       setPostData(response.data);
       const initialLikeCounts = {};
       const initialFollowStatus = {};
+      const initialFavoriteCounts = {};
+      const initialFavoriteStatus = {};
       response.data.forEach((post) => {
         initialLikeCounts[post.id] = post.likes.length;
         initialFollowStatus[post.user.id] = false;
+        initialFavoriteCounts[post.id] = post.saves.length;
+        initialFavoriteStatus[post.id] = false;
       });
       setLikeCounts(initialLikeCounts);
       setFollowStatus(initialFollowStatus);
+      setFavoriteCounts(initialFavoriteCounts);
+      setFavoriteStatus(initialFavoriteStatus);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -77,6 +85,28 @@ const VideoComponent = () => {
       ...prev,
       [userId]: !prev[userId],
     }));
+  };
+
+  const handleFavorite = async (userId, postId) => {
+    try {
+      await axios.post(`http://localhost:3001/all_favorites`, {
+        user_id: userId,
+        post_id: postId,
+      });
+      const updatedPostData = await axios.get(
+        `http://localhost:3001/all_posts/${postId}`
+      );
+      setFavoriteCounts((prev) => ({
+        ...prev,
+        [postId]: updatedPostData.data.saves.length,
+      }));
+      setFavoriteStatus((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+    } catch (err) {
+      console.error("error favorites post:", err.message);
+    }
   };
 
   return (
@@ -148,9 +178,15 @@ const VideoComponent = () => {
                   {item.comments.length}
                 </button>
               </Link>
-              <button className="rounded-full bg-black hover:bg-white/30 duration-200 flex items-center flex-col justify-center w-[5rem] h-[5rem]">
-                <BsSave2Fill size={25} />
-                {item.saves.length}
+              <button
+                onClick={() => handleFavorite(main_id, item.id)}
+                className="rounded-full bg-black hover:bg-white/30 duration-200 flex items-center flex-col justify-center w-[5rem] h-[5rem]"
+              >
+                <BsSave2Fill
+                  size={25}
+                  className={favoriteStatus[item.id] ? "text-yellow-500" : ""}
+                />
+                {favoriteCounts[item.id] || 0}
               </button>
             </div>
           </div>

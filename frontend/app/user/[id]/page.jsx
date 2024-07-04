@@ -6,7 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PiArrowBendDoubleUpRightBold } from "react-icons/pi";
 import { HiDotsVertical } from "react-icons/hi";
+
 import Liked from "@/components/Liked";
+import Favorite from "@/components/Favorite";
 
 require("dotenv").config();
 
@@ -132,9 +134,7 @@ const Page = ({ params }) => {
                       : "border-gray-700"
                   }`}
                 >
-                  <h2 className="w-full flex justify-center">
-                    <h2 className="w-full flex justify-center">Favorites</h2>
-                  </h2>
+                  <h2 className="w-full flex justify-center">Favorites</h2>
                 </Link>
                 <Link
                   onClick={handleLiked}
@@ -145,9 +145,7 @@ const Page = ({ params }) => {
                       : "border-gray-700"
                   }`}
                 >
-                  <h2 className="w-full flex justify-center">
-                    <h2 className="w-full flex justify-center">Liked</h2>
-                  </h2>
+                  <h2 className="w-full flex justify-center">Liked</h2>
                 </Link>
               </div>
 
@@ -179,7 +177,7 @@ const Page = ({ params }) => {
 
                 {showLikes && <Liked userId={item.id} />}
 
-                {showFavorites && <div>Favorites content goes here</div>}
+                {showFavorites && <Favorite userId={item.id} />}
               </div>
             </div>
           </div>

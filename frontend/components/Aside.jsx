@@ -37,62 +37,62 @@ const Aside = () => {
           <li>
             <Link
               href="/"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <span className="px-3">
                 <IoHomeSharp size={25} />
               </span>
-              For You
+              <span className="max-xl:hidden">For You</span>
             </Link>
           </li>
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <span className="px-3">
                 <SlUserFollowing size={25} />
               </span>
-              Explore
+              <span className="max-xl:hidden">Explore</span>
             </Link>
           </li>
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <span className="px-3">
                 <FaUserFriends size={25} />
               </span>
-              Following
+              <span className="max-xl:hidden">Following</span>
             </Link>
           </li>
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <span className="px-3">
                 <MdLiveTv size={25} />
               </span>
-              Friends
+              <span className="max-xl:hidden">Friends</span>
             </Link>
           </li>
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <span className="px-3">
                 <FaRegCompass size={25} />
               </span>
-              LIVE
+              <span className="max-xl:hidden">LIVE</span>
             </Link>
           </li>
           <li>
             <Link
               href={`/user/${user}`}
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
             >
               <Image src="" /> Profile
             </Link>

@@ -4,15 +4,13 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-require("dotenv").config();
-
 const Liked = ({ userId }) => {
   const [userLiked, setUserLiked] = useState([]);
 
   useEffect(() => {
     const fetchingData = async () => {
       const user = await axios.get(
-        `http://localhost:3001/all_likes/likedUser/${userId}`
+        `http://localhost:3001/all_favorites/favoritedUser/${userId}`
       );
       setUserLiked(user.data);
     };
@@ -20,8 +18,10 @@ const Liked = ({ userId }) => {
     fetchingData();
   }, []);
 
+  console.log(userLiked);
   return (
     <div>
+      hello
       <div className="absolute grid grid-cols-7 gap-5 max-2xl:grid-cols-6 max-xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
         {userLiked.map((item, index) => (
           <div key={index}>
