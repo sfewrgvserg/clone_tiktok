@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import multer from "multer";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -33,7 +35,7 @@ app.get("/all_users/userId/:id", async (req, res) => {
     const users = await user.findAll({ where: { id: params } });
     res.json(users);
   } catch (err) {
-    console.log(err.message);
+    console.log("errrrrrrrrrr", err.message);
   }
 });
 
@@ -113,6 +115,40 @@ app.get("/all_posts/:id", async (req, res) => {
     res.json(selectedLike);
   } catch (err) {
     console.log(err.message);
+  }
+});
+
+// /////////////////////////////// UPLOAD FILES ///////////////////////////////////
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../frontend/public/film");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/all_posts", upload.single("film"), async (req, res) => {
+  const { caption, created_by_user_id } = req.body;
+
+  const media_file_main_name = req.file.filename;
+  if (media_file_main_name) {
+    const media_file = `/film/${media_file_main_name}`;
+    try {
+      const createLike = await post.create({
+        caption,
+        media_file,
+        created_by_user_id,
+      });
+      res.status(201).json(createLike);
+    } catch (err) {
+      console.log("upload error:", err.message);
+    }
+  } else {
+    process.exit();
   }
 });
 

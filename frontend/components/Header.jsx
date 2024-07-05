@@ -28,10 +28,12 @@ const Header = () => {
       </div>
 
       <div className="text-white flex items-center space-x-7">
-        <button className="flex items-center p-3 bg-slate-700">
-          <CiSquarePlus size={25} />
-          UPLOAD
-        </button>
+        <Link href="http://localhost:3000/uploadfilm">
+          <button className="flex items-center p-3 hover:border-2 hover:border-stone-800 border-2 border-stone-500 duration-200">
+            <CiSquarePlus size={25} />
+            UPLOAD
+          </button>
+        </Link>
         <GrSend size={25} />
         <TbInbox size={25} />
       </div>
