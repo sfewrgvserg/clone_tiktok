@@ -11,7 +11,7 @@ import { CiSquarePlus } from "react-icons/ci";
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-between py-5 px-3 sticky bg-black z-50 top-0">
+    <div className="flex items-center justify-between py-5 px-3 sticky bg-black z-50 top-0 max-xl:border-b-[1px] max-xl:border-stone-500">
       <div>
         <Link href="/">
           <Image

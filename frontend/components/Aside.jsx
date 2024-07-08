@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 
 const Aside = () => {
   const [user, setUser] = useState("");
+  const [profile, setProfile] = useState("");
   const main_id = process.env.NEXT_PUBLIC_MAIN_ID;
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const Aside = () => {
       const users = await axios.get(
         `http://localhost:3001/all_users/userId/${main_id}`
       );
-      console.log(users.data[0].user_name);
+      setProfile(users.data[0].profile_img);
       setUser(users.data[0].user_name);
     };
 
@@ -31,13 +32,13 @@ const Aside = () => {
   }, []);
 
   return (
-    <div className="text-white h-screen w-[15rem]">
+    <div className="text-white h-screen w-[200%] max-xl:flex max-xl:justify-center max-xl:border-r-[1px] max-xl:border-stone-500">
       <div>
-        <ul>
+        <ul className="space-y-3">
           <li>
             <Link
               href="/"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
             >
               <span className="px-3">
                 <IoHomeSharp size={25} />
@@ -48,7 +49,7 @@ const Aside = () => {
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
             >
               <span className="px-3">
                 <SlUserFollowing size={25} />
@@ -59,7 +60,7 @@ const Aside = () => {
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
             >
               <span className="px-3">
                 <FaUserFriends size={25} />
@@ -70,7 +71,7 @@ const Aside = () => {
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
             >
               <span className="px-3">
                 <MdLiveTv size={25} />
@@ -81,7 +82,7 @@ const Aside = () => {
           <li>
             <Link
               href="#"
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200"
             >
               <span className="px-3">
                 <FaRegCompass size={25} />
@@ -92,9 +93,16 @@ const Aside = () => {
           <li>
             <Link
               href={`/user/${user}`}
-              className="flex items-center hover:bg-stone-600 py-3 rounded-md duration-200 "
+              className="flex items-center hover:bg-stone-600 py-3 rounded-md space-x-2 duration-200"
             >
-              <Image src="" /> Profile
+              <Image
+                src={profile}
+                width={25}
+                height={25}
+                alt="profile"
+                className="mx-3"
+              />
+              <span className="max-xl:hidden">Profile</span>
             </Link>
           </li>
         </ul>

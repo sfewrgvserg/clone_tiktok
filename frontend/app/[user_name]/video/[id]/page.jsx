@@ -72,7 +72,7 @@ const Page = ({ params }) => {
     const postDate = new Date(postDatetime);
 
     // Get the current time in milliseconds
-    const now = Date.now();
+    const now = new Date().getTime();
 
     // Calculate the difference in milliseconds
     const differenceInMs = now - postDate.getTime();
@@ -84,14 +84,19 @@ const Page = ({ params }) => {
     const thresholds = [
       { limit: 60, text: "just now" },
       { limit: 3600, text: "a minute ago" }, // Up to 1 hour
-      { limit: 3600 * 24, text: (hours) => `${hours} hours ago` }, // Up to 1 day
-      { limit: 3600 * 24 * 2, text: "yesterday" }, // 2 days ago
+      {
+        limit: 86400,
+        text: (hours) => `${Math.floor(hours / 3600)} hours ago`,
+      }, // Up to 1 day
+      { limit: 172800, text: "yesterday" }, // 2 days ago
     ];
 
     // Find the matching threshold
     for (const threshold of thresholds) {
       if (differenceInSeconds < threshold.limit) {
-        return threshold.text;
+        return typeof threshold.text === "function"
+          ? threshold.text(differenceInSeconds)
+          : threshold.text;
       }
     }
 
@@ -139,7 +144,14 @@ const Page = ({ params }) => {
                     <h1 className="text-lg font-medium">
                       {postData.user.user_name}
                     </h1>
-                    <h3>{postData.created_datetime}</h3>
+                    <h3>
+                      {/* {calculateTimeDifference(
+                        new Date(postData.created_datetime)
+                          .toISOString()
+                          .slice(0, 10)
+                      )} */}
+                      {calculateTimeDifference(postData.created_datetime)}
+                    </h3>
                   </div>
                 </div>
               </Link>
@@ -219,7 +231,14 @@ const Page = ({ params }) => {
                     </h2>
                     <div className="w-[39rem]">
                       <h4>{item.comment}</h4>
-                      <p>{calculateTimeDifference(item.created_datetime)}</p>
+                      <p>
+                        {/* {calculateTimeDifference(
+                          new Date(item.created_datetime)
+                            .toISOString()
+                            .slice(0, 10)
+                        )} */}
+                        {calculateTimeDifference(item.created_datetime)}
+                      </p>
                     </div>
                   </div>
                 </div>

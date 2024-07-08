@@ -5,37 +5,61 @@ import { useState } from "react";
 
 import { FaCloudUploadAlt } from "react-icons/fa";
 
+import "./page.css";
+
 require("dotenv").config();
 
 const page = () => {
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState("");
+  const [progress, setProgress] = useState({ started: false, pc: 0 });
+  const [msg, setMsg] = useState(null);
 
   const main_id = process.env.NEXT_PUBLIC_MAIN_ID;
 
-  const handleUpload = async () => {
+  const handleUpload = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
     if (!file) {
-      alert("Please select a file to upload.");
+      setMsg("Please select a file to upload.");
       return;
     }
 
     if (!caption.trim()) {
-      alert("Please enter a caption for the file.");
+      setMsg("Please enter a caption for the file.");
       return;
     }
 
     const formData = new FormData();
+
+    setMsg("uploading...");
     formData.append("film", file);
     formData.append("caption", caption);
     formData.append("created_by_user_id", main_id);
 
     try {
-      await axios.post("http://localhost:3001/all_posts", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      setProgress((prevState) => {
+        return { ...prevState, started: true };
       });
+      const posted = await axios.post(
+        "http://localhost:3001/all_posts",
+        formData,
+        {
+          onDownloadProgress: (progressEvent) => {
+            setProgress((prevState) => {
+              return { ...prevState, pc: progressEvent.progress * 100 };
+            });
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (posted) {
+        setMsg("uploading successful!");
+      }
     } catch (err) {
+      setMsg("uploading failed!");
       console.error(err.message);
     }
   };
@@ -74,6 +98,23 @@ const page = () => {
               >
                 Upload Your Film
               </button>
+
+              <div className="text-white flex flex-col">
+                {progress.started && (
+                  <progress
+                    max="100"
+                    className="w-[35rem] h-[2rem]"
+                    value={progress.pc}
+                  ></progress>
+                )}
+
+                {msg && (
+                  <div className="flex flex-col">
+                    <div>{msg}</div>
+                    <div>{progress.pc}%</div>
+                  </div>
+                )}
+              </div>
             </div>
           </label>
         </form>

@@ -132,7 +132,7 @@ const VideoComponent = () => {
                 controls
                 aria-label="Video player"
                 muted
-                className="h-[55rem] rounded-xl py-5"
+                className="h-[55rem] w-[35rem] rounded-xl py-5"
               >
                 <source src={item.media_file} type="video/mp4" />
                 Your browser does not support the video tag.

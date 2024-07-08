@@ -17,7 +17,7 @@ const post = sequelize.define(
       references: { key: "id", model: User },
     },
     created_datetime: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },
@@ -29,7 +29,6 @@ const post = sequelize.define(
     media_file: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: new Date(),
     },
   },
   { timestamps: false }

@@ -23,7 +23,7 @@ const comment = sequelize.define(
       references: { key: "id", table: "posts" },
     },
     created_datetime: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },

@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import user from "./user.js";
+import follow from "./follow.js";
 import post from "./post.js";
 import like from "./like.js";
 import save from "./save.js";
@@ -25,7 +26,7 @@ app.get("/all_users", async (req, res) => {
     const users = await user.findAll();
     res.json(users);
   } catch (err) {
-    console.log(err.message);
+    console.log("error from all_users", err.message);
   }
 });
 
@@ -72,6 +73,7 @@ app.get("/all_users/:id", async (req, res) => {
 app.get("/all_posts", async (req, res) => {
   try {
     const posts = await post.findAll({
+      order: [["created_datetime", "DESC"]],
       include: [
         {
           model: like,
@@ -121,10 +123,10 @@ app.get("/all_posts/:id", async (req, res) => {
 // /////////////////////////////// UPLOAD FILES ///////////////////////////////////
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, "../frontend/public/film");
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
 });
@@ -280,6 +282,31 @@ app.get("/all_favorites", async (req, res) => {
   }
 });
 
+app.get("/all_favorites/:id", async (req, res) => {
+  try {
+    const param = req.params.id;
+    const selectedFavorite = await save.findAll({
+      where: { post_id: param },
+    });
+    res.json(selectedFavorite);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+app.get("/all_favorites/favoritedUser/:id", async (req, res) => {
+  try {
+    const param = req.params.id;
+    const selectedFavorite = await save.findAll({
+      where: { user_id: param },
+      include: [{ model: post }, { model: user }],
+    });
+    res.json(selectedFavorite);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.post("/all_favorites", async (req, res) => {
   try {
     const user_id = req.body.user_id;
@@ -303,28 +330,47 @@ app.post("/all_favorites", async (req, res) => {
   }
 });
 
-app.get("/all_favorites/:id", async (req, res) => {
+// /////////////////////////////// FOLLOWER ///////////////////////////////////
+
+app.get("/all_followers", async (req, res) => {
   try {
-    const param = req.params.id;
-    const selectedFavorite = await save.findAll({
-      where: { post_id: param },
-    });
-    res.json(selectedFavorite);
+    const followers = await follow.findAll();
+    res.json(followers);
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
   }
 });
 
-app.get("/all_favorites/favoritedUser/:id", async (req, res) => {
+app.post("/all_followers", async (req, res) => {
   try {
-    const param = req.params.id;
-    const selectedFavorite = await save.findAll({
-      where: { user_id: param },
-      include: [{ model: post }, { model: user }],
+    const user_follower_id = req.body.user_follower_id;
+    const user_followed_id = req.body.user_followed_id;
+
+    const findFollowers = await follow.findOne({
+      where: {
+        following_user_id: user_follower_id,
+        followed_user_id: user_followed_id,
+      },
     });
-    res.json(selectedFavorite);
+    if (findFollowers) {
+      await follow.destroy({
+        where: {
+          following_user_id: user_follower_id,
+          followed_user_id: user_followed_id,
+        },
+      });
+      res.status(200).json({ message: "unfollow" });
+    } else {
+      const createdfollow = await follow.create({
+        where: {
+          following_user_id: user_follower_id,
+          followed_user_id: user_followed_id,
+        },
+      });
+      res.status(201).json(createdfollow);
+    }
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
   }
 });
 
