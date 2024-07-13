@@ -145,11 +145,6 @@ const Page = ({ params }) => {
                       {postData.user.user_name}
                     </h1>
                     <h3>
-                      {/* {calculateTimeDifference(
-                        new Date(postData.created_datetime)
-                          .toISOString()
-                          .slice(0, 10)
-                      )} */}
                       {calculateTimeDifference(postData.created_datetime)}
                     </h3>
                   </div>
@@ -206,39 +201,31 @@ const Page = ({ params }) => {
 
             <div>
               {postData.comments.map((item, index) => (
-                <div key={index} className="flex items-center space-x-3 py-2 ">
-                  <div>
+                <div key={index} className="space-x-3 py-2">
+                  <div className="flex items-start space-x-3 py-2">
                     <Image
                       src={
                         listUser.find(
                           (user) => user.id === item.created_by_user_id
                         )?.profile_img
                       }
-                      height={45}
-                      width={45}
+                      height={40}
+                      width={40}
                       className="rounded-full border-2 border-indigo-400"
                       alt={index}
                     />
-                  </div>
-
-                  <div className="space-y-1 text-sm">
-                    <h2 className="text-lg font-medium">
-                      {
-                        listUser.find(
-                          (user) => user.id === item.created_by_user_id
-                        )?.user_name
-                      }
-                    </h2>
-                    <div className="w-[39rem]">
-                      <h4>{item.comment}</h4>
-                      <p>
-                        {/* {calculateTimeDifference(
-                          new Date(item.created_datetime)
-                            .toISOString()
-                            .slice(0, 10)
-                        )} */}
-                        {calculateTimeDifference(item.created_datetime)}
-                      </p>
+                    <div className="space-y-1 text-sm">
+                      <h2 className="text-lg font-medium">
+                        {
+                          listUser.find(
+                            (user) => user.id === item.created_by_user_id
+                          )?.user_name
+                        }
+                      </h2>
+                      <div className="w-[39rem]">
+                        <h4>{item.comment}</h4>
+                        <p>{calculateTimeDifference(item.created_datetime)}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

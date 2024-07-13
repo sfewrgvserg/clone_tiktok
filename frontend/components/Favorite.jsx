@@ -21,7 +21,6 @@ const Liked = ({ userId }) => {
   console.log(userLiked);
   return (
     <div>
-      hello
       <div className="absolute grid grid-cols-7 gap-5 max-2xl:grid-cols-6 max-xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
         {userLiked.map((item, index) => (
           <div key={index}>
